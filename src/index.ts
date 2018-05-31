@@ -2,7 +2,7 @@ import AppRoot from './AppRoot';
 import { exec } from 'child_process';
 import container from './container.config';
 
-process.title = 'r2app';
+process.title = 'HuTaoApp';
 const app = new AppRoot(container);
 app.start();
 
