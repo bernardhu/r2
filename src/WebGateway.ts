@@ -102,6 +102,7 @@ export default class WebGateway {
   }
 
   private async quoteUpdated(quotes: Quote[]): Promise<void> {
+    this.log.debug('onQuoteUpdated');
     this.broadcast('quoteUpdated', quotes);
   }
 
@@ -149,6 +150,7 @@ export default class WebGateway {
 
   private broadcast(type: string, body: any) {
     for (const client of this.clients) {
+      this.log.debug(client.readyState.toString(), WebSocket.OPEN.toString(), type);
       if (client.readyState === WebSocket.OPEN) {
         client.send(JSON.stringify({ type, body }), err => {
           if (err) {
@@ -156,6 +158,10 @@ export default class WebGateway {
             _.pull(this.clients, client);
           }
         });
+        //this.log.debug(type, body);
+        if (type === 'quoteUpdated'){
+          this.log.debug(body);
+        }
       }
     }
   }

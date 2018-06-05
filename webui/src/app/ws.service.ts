@@ -21,6 +21,7 @@ export class WsService {
   private readonly host = window.location.hostname;
   private readonly url = `ws://${this.host}:8720`;
   private connected = false;
+  private connCnt = 0;
   error$: Observable<{ code: string }>;
   config$: Observable<ConfigRoot>;
   activePair$: Observable<PairWithSummary[]>;
@@ -31,21 +32,26 @@ export class WsService {
   quote$: Observable<Quote[]>;
   socket: Subject<MessageEvent>;
 
-  connect() {
+
+  connect(caller: string) {
+    console.log(caller, "8720 ........connecting")
     if (this.connected) {
       return;
     }
+
     const ws = new ReconnectingWebSocket(this.url);
     const observable = Observable.create((obs: Observer<MessageEvent>) => {
       ws.onmessage = obs.next.bind(obs);
-      ws.onerror = e => {
-        obs.next.bind(obs)({ data: JSON.stringify({ type: 'error', body: e }) });
-      };
+      //ws.onerror = e => {
+      //  obs.next.bind(obs)({ data: JSON.stringify({ type: 'error', body: e }) });
+      //};
       return ws.close.bind(ws);
     });
     const observer = {
       next: (data: Object) => {
+        console.log("ws state 8720:", ws.readyState, WebSocket.OPEN)
         if (ws.readyState === WebSocket.OPEN) {
+          console.log(data)
           ws.send(JSON.stringify(data));
         }
       }
@@ -61,6 +67,7 @@ export class WsService {
     this.config$ = this.mapMessage<ConfigRoot>(sharedObservable, 'configUpdated');
     this.error$ = this.mapMessage<{ code: string }>(sharedObservable, 'error');
     this.connected = true;
+    console.log(caller, "8720 ........connected")
   }
 
   private mapMessage<T>(sharedObservable: Observable<MessageEvent>, type: string) {

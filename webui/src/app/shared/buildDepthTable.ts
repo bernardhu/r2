@@ -13,14 +13,20 @@ class DepthTable {
   ) {}
 
   build(): DepthLine[] {
+    console.log("quote", this.quotes)
     const asks = this.quotes.filter(q => q.side === QuoteSide.Ask);
     const bids = this.quotes.filter(q => q.side === QuoteSide.Bid);
+    console.log("ask", asks)
+    console.log("bid", bids)
     this.bestTradableAsk = _(asks)
       .filter(q => this.isTradable(q))
       .minBy('price');
     this.bestTradableBid = _(bids)
       .filter(q => this.isTradable(q))
       .maxBy('price');
+
+    console.log("bestTradableAsk", this.bestTradableAsk)
+    console.log("bestTradableBid", this.bestTradableBid)
     const depthLines = _(this.quotes)
       .groupBy(q => q.price)
       .map((quotes: Quote[]) => _.reduce(quotes, this.depthReducer.bind(this), this.blankDepthLine()))

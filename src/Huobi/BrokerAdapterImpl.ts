@@ -121,7 +121,7 @@ export default class BrokerAdapterImpl implements BrokerAdapter {
   }
 
   private mapToQuote(orderBook: ccxt.OrderBook): Quote[] {
-    console.log("huobi", orderBook);
+    //console.log("huobi", orderBook);
     const asks = _(orderBook.asks)
       .take(100)
       .map(q => {

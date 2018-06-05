@@ -10,7 +10,7 @@ export class DepthService {
   depth$: Observable<DepthLine[]>;
 
   constructor(private readonly wsService: WsService) {
-    wsService.connect();
+    wsService.connect("DepthService");
     this.depth$ = wsService.quote$.pipe(
       withLatestFrom(this.wsService.position$, this.wsService.config$),
       map(([quotes, position, config]) => buildDepthTable(quotes, position, config))

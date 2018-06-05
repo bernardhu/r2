@@ -16,7 +16,7 @@ export class ActivePairComponent implements OnInit, OnDestroy {
   constructor(private readonly wsService: WsService) {}
 
   ngOnInit() {
-    this.wsService.connect();
+    this.wsService.connect("ActivePairComponent");
     this.subscription = this.wsService.activePair$.subscribe(pairs => {
       this.pairs = pairs;
       for (const pairWithSummary of this.pairs) {

@@ -15,7 +15,7 @@ export class ConfigFormComponent implements OnInit, OnDestroy {
   constructor(private readonly wsService: WsService) {}
 
   ngOnInit() {
-    this.wsService.connect();
+    this.wsService.connect("ConfigFormComponent");
     this.subscription = this.wsService.config$.subscribe(config => {
       this.config = JSON.stringify(config, null, 2);
     });

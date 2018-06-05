@@ -64,6 +64,7 @@ export default class QuoteAggregator extends AwaitableEventEmitter {
     this.quotes = value;
     this.log.debug('New quotes have been set.');
     this.log.debug('Calling onQuoteUpdated...');
+    //this.log.debug('merged quotes', value);
     await this.emitParallel('quoteUpdated', this.quotes);
     this.log.debug('onQuoteUpdated done.');
   }

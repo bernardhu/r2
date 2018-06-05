@@ -25,6 +25,7 @@ export class LogService {
     });
     const observer = {
       next: (data: Object) => {
+        console.log("ws state 8721:", ws.readyState, WebSocket.OPEN)
         if (ws.readyState === WebSocket.OPEN) {
           ws.send(JSON.stringify(data));
         }

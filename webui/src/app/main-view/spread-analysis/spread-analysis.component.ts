@@ -15,7 +15,7 @@ export class SpreadAnalysisComponent implements OnInit, OnDestroy {
   constructor(private readonly wsService: WsService) {}
 
   ngOnInit() {
-    this.wsService.connect();
+    this.wsService.connect("SpreadAnalysisComponent");
     this.subscription = this.wsService.spread$.subscribe(spread => {
       this.spread = spread;
     });

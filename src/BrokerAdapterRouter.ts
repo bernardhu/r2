@@ -26,6 +26,7 @@ export default class BrokerAdapterRouter {
     try {
       await this.brokerAdapterMap[order.broker].send(order);
       this.orderService.emitOrderUpdated(order as OrderImpl);
+      this.brokerStabilityTracker.increment(order.broker);
     } catch (ex) {
       this.brokerStabilityTracker.decrement(order.broker);
       throw ex;
@@ -49,6 +50,8 @@ export default class BrokerAdapterRouter {
       // for backword compatibility, use getBtcPosition if getPositions is not defined
       if (!_.isFunction(this.brokerAdapterMap[broker].getPositions) && this.configStore.config.symbol === 'BTC/JPY') {
         const btcPosition = await this.brokerAdapterMap[broker].getBtcPosition();
+
+        this.brokerStabilityTracker.increment(broker);
         return new Map<string, number>([['BTC', btcPosition]]);
       }
       if (this.brokerAdapterMap[broker].getPositions !== undefined) {
@@ -63,6 +66,7 @@ export default class BrokerAdapterRouter {
 
   async fetchQuotes(broker: Broker): Promise<Quote[]> {
     try {
+      this.brokerStabilityTracker.increment(broker);
       return await this.brokerAdapterMap[broker].fetchQuotes();
     } catch (ex) {
       this.brokerStabilityTracker.decrement(broker);

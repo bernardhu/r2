@@ -79,6 +79,7 @@ export default class ReportService {
   }
 
   private async quoteUpdated(quotes: Quote[]): Promise<void> {
+    this.log.debug('onQuoteUpdated');
     const stat = await this.spreadAnalyzer.getSpreadStat(quotes);
     if (stat) {
       await this.spreadStatTimeSeries.put(stat);

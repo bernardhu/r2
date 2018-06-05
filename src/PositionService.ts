@@ -108,6 +108,7 @@ export default class PositionService extends EventEmitter {
       new Decimal(brokerConfig.maxShortPosition).plus(baseCcyPosition).toNumber()
     ]) as number;
     const isStable = this.brokerStabilityTracker.isStable(brokerConfig.broker);
+    this.log.debug('getBrokerPosition ', brokerConfig.broker, ' allowlong ', allowedLongSize, ' allowshort ', allowedShortSize, baseCcy, isStable);
     return {
       broker: brokerConfig.broker,
       baseCcyPosition,

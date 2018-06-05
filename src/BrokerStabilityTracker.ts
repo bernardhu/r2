@@ -2,12 +2,14 @@ import { Broker, ConfigStore } from './types';
 import { inject, injectable } from 'inversify';
 import symbols from './symbols';
 import * as _ from 'lodash';
+import { getLogger } from '@bitr/logger';
 
 const MAX = 10;
 const MIN = 1;
 
 @injectable()
 export default class BrokerStabilityTracker {
+  private readonly log = getLogger(this.constructor.name);
   private stabilityMap: Map<Broker, number>;
   private timer;
 
@@ -34,6 +36,8 @@ export default class BrokerStabilityTracker {
       const counter = this.stability(broker);
       const newValue = counter - 1;
       this.stabilityMap.set(broker, _.clamp(newValue, MIN, MAX));
+
+      this.log.debug(broker, ' counter dec ', newValue);
     }
   }
 
@@ -46,6 +50,7 @@ export default class BrokerStabilityTracker {
     if (this.configStore.config.stabilityTracker) {
       threshold = this.configStore.config.stabilityTracker.threshold || 0;
     }
+    this.log.debug(broker, ' counter isstable ', counter, ' threshold ', threshold);
     return counter >= threshold;
   }
 
@@ -53,9 +58,10 @@ export default class BrokerStabilityTracker {
     return this.stabilityMap.get(broker) as number;
   }
 
-  private increment(broker: Broker) {
+  increment(broker: Broker) {
     const counter = this.stability(broker);
     const newValue = counter + 1;
+    this.log.debug(broker, ' counter inc  ', newValue);
     this.stabilityMap.set(broker, _.clamp(newValue, MIN, MAX));
   }
 

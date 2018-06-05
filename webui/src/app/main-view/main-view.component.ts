@@ -17,7 +17,7 @@ export class MainViewComponent implements OnInit, OnDestroy {
   constructor(private readonly wsService: WsService) {}
 
   ngOnInit() {
-    this.wsService.connect();
+    this.wsService.connect("MainViewComponent");
     let timer;
     this.subscription = this.wsService.error$.pipe(filter(x => x.code !== undefined), map(x => x.code)).subscribe(x => {
       this.errorMessage = `WebSocket connection failed. Error: ${x}`;

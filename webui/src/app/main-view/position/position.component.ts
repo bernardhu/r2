@@ -15,7 +15,7 @@ export class PositionComponent implements OnInit, OnDestroy {
   constructor(private readonly wsService: WsService) {}
 
   ngOnInit() {
-    this.wsService.connect();
+    this.wsService.connect("PositionComponent");
     this.subscription = this.wsService.position$.subscribe(x => {
       this.brokerPositions = _.values(x);
     });
