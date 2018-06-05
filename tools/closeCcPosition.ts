@@ -13,7 +13,7 @@ async function main() {
   const positions = await ccApi.getAllOpenLeveragePositions();
   for (const position of positions) {
     const request = {
-      pair: 'btc_jpy',
+      pair: 'btc_usdt',
       order_type: position.side === 'buy' ? 'close_long' : 'close_short',
       amount: position.amount,
       position_id: position.id

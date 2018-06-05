@@ -5,7 +5,7 @@ import { readJsonFileSync } from './util';
 import * as _ from 'lodash';
 
 const defaultValues = {
-  symbol: 'BTC/JPY'
+  symbol: 'BTC/USDT'
 };
 
 export function getConfigRoot(): ConfigRoot {

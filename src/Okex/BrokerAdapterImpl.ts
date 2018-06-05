@@ -71,6 +71,18 @@ export default class BrokerAdapterImpl implements BrokerAdapter {
     return btcBalance.free;
   }
 
+  async getPositions(): Promise<Map<string, number>> {
+    const balanceResponse = await this.brokerApi.getBalance();
+    const map = new Map<string, number>();
+    _.forEach(balanceResponse, function(value, key){
+      if (value.free != undefined){
+        map.set(key, value.free)
+      }
+    })
+    //console.log(this.broker, map)
+    return map;
+  }
+  
   async fetchQuotes(): Promise<Quote[]> {
     const response = await this.brokerApi.getOrderbook();
     return this.mapToQuote(response);

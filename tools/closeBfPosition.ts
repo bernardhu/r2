@@ -14,7 +14,7 @@ async function main() {
   const bfBalance = await bfApi.getBalance();
   const bfBtc = (bfBalance.find(x => x.currency_code === 'BTC') as Balance).available;
   const request = {
-    product_code: 'BTC_JPY',
+    product_code: 'BTC_USDT',
     child_order_type: 'MARKET',
     side: 'SELL',
     size: _.floor(bfBtc, 4)

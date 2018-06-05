@@ -89,6 +89,7 @@ export class StabilityTrackerConfig extends Castable {
 export class ConfigRoot extends Castable {
   @cast language: string;
   @cast demoMode: boolean;
+  @cast anchor: string;
   @cast symbol: string;
   @cast priceMergeSize: number;
   @cast maxSize: number;

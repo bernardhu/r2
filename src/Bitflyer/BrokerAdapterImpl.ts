@@ -63,15 +63,7 @@ export default class BrokerAdapterImpl implements BrokerAdapter {
   }
 
   async cancel(order: Order): Promise<void> {
-    let productCode = '';
-    switch (order.symbol) {
-      case 'BTC/JPY':
-        productCode = 'BTC_JPY';
-        break;
-      default:
-        throw new Error('Not implemented.');
-    }
-    const request = { product_code: productCode, child_order_acceptance_id: order.brokerOrderId };
+    const request = { product_code: order.symbol, child_order_acceptance_id: order.brokerOrderId };
     await this.brokerApi.cancelChildOrder(request);
     order.lastUpdated = new Date();
     order.status = OrderStatus.Canceled;
@@ -94,15 +86,6 @@ export default class BrokerAdapterImpl implements BrokerAdapter {
   private mapOrderToSendChildOrderRequest(order: Order): SendChildOrderRequest {
     if (order.cashMarginType !== CashMarginType.Cash) {
       throw new Error('Not implemented.');
-    }
-
-    let productCode = '';
-    switch (order.symbol) {
-      case 'BTC/JPY':
-        productCode = 'BTC_JPY';
-        break;
-      default:
-        throw new Error('Not implemented.');
     }
 
     let price = 0;
@@ -137,7 +120,7 @@ export default class BrokerAdapterImpl implements BrokerAdapter {
 
     return {
       price,
-      product_code: productCode,
+      product_code: order.symbol,
       child_order_type: childOrderType,
       side: OrderSide[order.side].toUpperCase(),
       size: order.size,
