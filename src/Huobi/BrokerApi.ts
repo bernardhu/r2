@@ -18,7 +18,7 @@ export default class BrokerApi {
 
   async sendOrder(request: OrderRequest): Promise<OrderRequestResponse> {
     return await this.exchange.createOrder(request.symbol, 
-      request.type, request.side, request.amount.toString()) ;
+      request.type, request.side, request.amount.toString(), request.price) ;
   }
 
   async getOrder(id: string): Promise<OrderResponse> {

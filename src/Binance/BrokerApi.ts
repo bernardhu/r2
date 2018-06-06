@@ -18,7 +18,7 @@ export default class BrokerApi {
 
   async sendOrder(request: OrderRequest): Promise<OrderRequestResponse> {
     return await this.exchange.createOrder(request.symbol, 
-      request.type, request.side, request.amount.toString()) ;
+      request.type, request.side, request.amount.toString(), request.price) ;
   }
 
   async getOrder(id: string): Promise<OrderResponse> {
@@ -34,7 +34,7 @@ export default class BrokerApi {
   }
 
   async getBalance(): Promise<ccxt.Balances> {
-    return await this.exchange.fetchBalance();
+    return await this.exchange.fetchBalance({'recvWindow': 10000000});
   }
 
   async getOrderbook(): Promise<ccxt.OrderBook> {

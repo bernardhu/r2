@@ -24,6 +24,7 @@ export default class BrokerAdapterRouter {
   async send(order: Order): Promise<void> {
     this.log.debug(order.toString());
     try {
+      console.log(order)
       await this.brokerAdapterMap[order.broker].send(order);
       this.orderService.emitOrderUpdated(order as OrderImpl);
       this.brokerStabilityTracker.increment(order.broker);

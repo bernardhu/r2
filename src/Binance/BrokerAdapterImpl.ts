@@ -1,6 +1,7 @@
 ﻿import {
   BrokerAdapter,
   OrderStatus,
+  OrderSide,
   OrderType,
   CashMarginType,
   QuoteSide,
@@ -95,6 +96,7 @@ export default class BrokerAdapterImpl implements BrokerAdapter {
     let symbol = order.symbol;
     let price = 0;
     let type = '';
+    let side = '';
     switch (order.type) {
       case OrderType.Limit:
         type = order.type.toLowerCase();
@@ -108,10 +110,19 @@ export default class BrokerAdapterImpl implements BrokerAdapter {
         throw new Error('Not implemented.');
     }
 
+    switch (order.side) {
+      case OrderSide.Buy:
+      case OrderSide.Sell:
+        side = order.side.toLowerCase();
+        break;
+      default:
+        throw new Error('Not implemented.');
+    }
+
     return {
       symbol: symbol,
       type: type,
-      side: order.side,
+      side: side,
       price: price,
       amount: order.size
     };
